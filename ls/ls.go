@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func SimpleLs() {
+func GetLs() []LsStruct {
 	cmd := exec.Command("ls", "-A", "-lt", "--author", "-b", "-c", "-i", "--time-style=full-iso")
 	stdout, err := cmd.Output()
 
@@ -29,30 +29,30 @@ func SimpleLs() {
 		var lsout LsStruct
 		var errParse error
 
-		lsout.inode, errParse = strconv.Atoi(temp[0])
+		lsout.Inode, errParse = strconv.Atoi(temp[0])
 		if errParse != nil {
 			panic("unable to parse inode value")
 		}
 
-		lsout.permission = temp[1]
-		lsout.no_of_content, errParse = strconv.Atoi(temp[2])
+		lsout.Permission = temp[1]
+		lsout.No_of_content, errParse = strconv.Atoi(temp[2])
 		if errParse != nil {
 			panic("unable to parse no_content integer")
 		}
 
-		lsout.user = temp[3]
-		lsout.group = temp[4]
-		lsout.author = temp[5]
+		lsout.User = temp[3]
+		lsout.Group = temp[4]
+		lsout.Author = temp[5]
 
-		lsout.size, errParse = strconv.Atoi(temp[6])
+		lsout.Size, errParse = strconv.Atoi(temp[6])
 		if errParse != nil {
 			panic("unable to parse size integer")
 		}
 
-		lsout.filename = temp[10]
+		lsout.Filename = temp[10]
 		timeString := temp[7] + "T" + temp[8] + temp[9][:3] + ":" + temp[9][3:]
 
-		lsout.datetime, err = time.Parse(time.RFC3339Nano, timeString)
+		lsout.Datetime, err = time.Parse(time.RFC3339Nano, timeString)
 		if err != nil {
 			fmt.Println("unable to parse time integer : ", err)
 		}
@@ -60,5 +60,6 @@ func SimpleLs() {
 		lsOutput = append(lsOutput, lsout)
 	}
 
-	fmt.Printf("%+v", lsOutput)
+	// fmt.Printf("%+v", lsOutput)
+	return lsOutput
 }
